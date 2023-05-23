@@ -13,6 +13,6 @@ TMPDIR=/tmp
 cd ${WORKDIR}
 virtualenv -p python3 scoutsuite
 source ${WORKDIR}/scoutsuite/bin/activate
-pip install scoutsuite
+pip install 'scoutsuite @ git+https://github.com/dmoxyeze/ncc-scoutsuite.git'
 
 echo -e "\n\nScoutsuite Installation Complete!\n\n"
