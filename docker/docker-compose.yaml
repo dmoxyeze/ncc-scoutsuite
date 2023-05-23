@@ -1,9 +1,10 @@
 version: "3.8"
 services:
   ncc-scoutsuite:
-    image: scoutsuite:latest
+    image: ncc-scoutsuite:23-5-23
     env_file:
       - config/build.env
+    platform: "linux/amd64"
     build:
       context: .
       dockerfile: Dockerfile
