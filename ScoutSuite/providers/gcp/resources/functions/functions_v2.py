@@ -17,27 +17,29 @@ class FunctionsV2(Resources):
 
     def _parse_function(self, raw_function):
         function_dict = {}
+        try:
+            function_dict['id'] = get_non_provider_id(raw_function['name'])
+            function_dict['name'] = raw_function['name'].split('/')[-1]
+            function_dict['status'] = raw_function['state']
+            function_dict['update_time'] = raw_function['updateTime']
+            function_dict['version_id'] = raw_function.get('serviceConfig', {}).get('revision')
 
-        function_dict['id'] = get_non_provider_id(raw_function['name'])
-        function_dict['name'] = raw_function['name'].split('/')[-1]
-        function_dict['status'] = raw_function['state']
-        function_dict['update_time'] = raw_function['updateTime']
-        function_dict['version_id'] = raw_function.get('serviceConfig', {}).get('revision')
+            function_dict['runtime'] = raw_function.get('buildConfig', {}).get('runtime')
+            function_dict['memory'] = raw_function.get('serviceConfig', {}).get('availableMemory')
+            function_dict['timeout'] = raw_function.get('serviceConfig', {}).get('timeoutSeconds')
+            function_dict['max_instances'] = raw_function.get('serviceConfig', {}).get('maxInstanceCount')
 
-        function_dict['runtime'] = raw_function.get('buildConfig', {}).get('runtime')
-        function_dict['memory'] = raw_function.get('serviceConfig', {}).get('availableMemory')
-        function_dict['timeout'] = raw_function.get('serviceConfig', {}).get('timeoutSeconds')
-        function_dict['max_instances'] = raw_function.get('serviceConfig', {}).get('maxInstanceCount')
+            function_dict['url'] = raw_function.get('serviceConfig', {}).get('uri')
+            function_dict['ingress_settings'] = raw_function.get('serviceConfig', {}).get('ingressSettings')
 
-        function_dict['url'] = raw_function.get('serviceConfig', {}).get('uri')
-        function_dict['ingress_settings'] = raw_function.get('serviceConfig', {}).get('ingressSettings')
+            function_dict['service_account'] = raw_function.get('serviceConfig', {}).get('serviceAccountEmail')
+            function_dict['bindings'] = raw_function['bindings']
 
-        function_dict['service_account'] = raw_function.get('serviceConfig', {}).get('serviceAccountEmail')
-        function_dict['bindings'] = raw_function['bindings']
+            function_dict['environment_variables'] = raw_function.get('serviceConfig', {}).get('environmentVariables')
+            function_dict['environment_variables_secrets'] = get_environment_secrets(function_dict['environment_variables'])
 
-        function_dict['environment_variables'] = raw_function.get('serviceConfig', {}).get('environmentVariables')
-        function_dict['environment_variables_secrets'] = get_environment_secrets(function_dict['environment_variables'])
+            function_dict['labels'] = raw_function['labels']
 
-        function_dict['labels'] = raw_function['labels']
-
-        return function_dict['id'], function_dict
+            return function_dict['id'], function_dict
+        except KeyError as e:
+            print("An error has occured: " + str(e))
