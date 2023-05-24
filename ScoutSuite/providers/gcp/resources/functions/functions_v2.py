@@ -41,5 +41,5 @@ class FunctionsV2(Resources):
             function_dict['labels'] = raw_function['labels']
 
             return function_dict['id'], function_dict
-        except KeyError as e:
+        except Exception as e:
             print("An error has occured: " + str(e))
