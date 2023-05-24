@@ -10,10 +10,13 @@ class FunctionsV1(Resources):
         self.project_id = project_id
 
     async def fetch_all(self):
-        raw_functions = await self.facade.functions.get_functions_v1(self.project_id)
-        for raw_function in raw_functions:
-            function_id, function = self._parse_function(raw_function)
-            self[function_id] = function
+        try:
+            raw_functions = await self.facade.functions.get_functions_v1(self.project_id)
+            for raw_function in raw_functions:
+                function_id, function = self._parse_function(raw_function)
+                self[function_id] = function
+        except:
+            print("An error has occured!")
 
     def _parse_function(self, raw_function):
         function_dict = {}
