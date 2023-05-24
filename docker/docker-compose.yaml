@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   ncc-scoutsuite:
-    image: ncc-scoutsuite:23-5-23-latest
+    image: ncc-scoutsuite:24-5-23
     env_file:
       - config/build.env
     platform: "linux/amd64"
